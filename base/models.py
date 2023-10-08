@@ -43,7 +43,8 @@ class Reply(models.Model):
     review = models.OneToOneField(Review, on_delete=models.CASCADE, related_name='reply')
     
     def __str__(self):
-        return f"Answer {str(self.user.username)} to review [{str(self.review.id)}] on post [{str(self.post.id)}]"
+        return f"Answer {str(self.user.username)} to review [{str(self.review.id)}] on post [{str(self.review.post.id)}]"
     
-
- 
+    class Meta:
+        verbose_name_plural = 'replies'
+  
