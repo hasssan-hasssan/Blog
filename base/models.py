@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from taggit.managers import TaggableManager
 from django.template.defaultfilters import slugify
+from base.managers import *
 
 
 class Category(models.Model):
@@ -29,6 +30,8 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='posts', null=True)
     tags = TaggableManager()
+    objects = models.Manager() # Django manager
+    published = PublishedManager() # Custom manager for fetch published posts
     
     def __str__(self):
         return self.title
@@ -44,6 +47,8 @@ class Review(models.Model):
     confirm = models.BooleanField(default=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reviews')
+    objects = models.Manager() # Django manager
+    confirmed = ConfirmReviewManager() # Custom manager for fetch confirm reviews.
     
     def __str__(self):
         return f"{self.text[:30]} on Post: {str(self.post.title)}"
