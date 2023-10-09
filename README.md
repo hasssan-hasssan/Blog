@@ -6,7 +6,7 @@ Blog app by django . just for practice and my portfolio.
 
 $ git clone https://github.com/hasssan-hasssan/Blog.git
 
-$ cd Todo
+$ cd Blog
 
 $ python -m venv venv
 
