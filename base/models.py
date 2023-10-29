@@ -1,8 +1,9 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from taggit.managers import TaggableManager
 from django.template.defaultfilters import slugify
+from django.urls import reverse
+from taggit.managers import TaggableManager
 from base.managers import *
 
 
@@ -20,8 +21,10 @@ class Category(models.Model):
         
 
 class Post(models.Model):
+    thumbnail = models.ImageField(null=True, blank=True, upload_to='photos/posts/')
     STATUS_CHOICES = ((('draft', 'Draft'),('published', 'Published')))
     title = models.CharField(max_length=200)
+    intro = models.CharField(max_length=255, default="")
     slug = models.SlugField(max_length=200, unique_for_date='publish')
     body = models.TextField()
     create = models.DateTimeField(auto_now_add=True)
@@ -40,6 +43,15 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Post, self).save(*args, **kwargs)
+        
+    def get_absolute_url(self):
+        return reverse("post_detail", args=[
+            self.publish.year,
+            self.publish.month,
+            self.publish.day,
+            self.slug,
+        ])
+    
         
         
 class Review(models.Model):

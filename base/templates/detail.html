@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title  }}{% endblock title %}
+{% block content %}
+
+<div class="col-lg-8">
+    <!-- Post content-->
+    <article>
+        <!-- Post header-->
+        <header class="mb-4">
+            <!-- Post title-->
+            <h1 class="fw-bolder mb-1">{{ post.title }}</h1>
+            <!-- Post meta content-->
+            <div class="text-muted fst-italic mb-2">Posted on {{ post.publish | date:"M D Y"}} by {{ post.author.username }}</div>
+            <!-- Post categories-->
+            {% for tag in post.tags.all %}
+                <a class="badge bg-secondary text-decoration-none link-light" href="#!">{{ tag.name }}</a>
+            {% endfor %}
+        </header>
+        <!-- Preview image figure-->
+        <figure class="mb-4"><img class="img-fluid rounded" src={{ post.thumbnail.url }} alt={{ post.title }} /></figure>
+        <!-- Post content-->
+        <section class="mb-5">
+        {{post.body | safe | linebreaks }} 
+        </section>
+    </article>
+    <!-- Comments section-->
+    <section class="mb-5">
+        <div class="card bg-light">
+            <div class="card-body">
+                <!-- Comment form-->
+                {% if not user.is_authenticated %}
+                    <h1>Please login to leave comment! </h1>
+                {% else %}
+                    <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                {% endif %}
+
+                {% for review in reviews %}
+                    <hr/>    
+                    <!--  Comment with nested comments-->
+                    <div class="d-flex mb-4">
+                        <!-- Parent comment-->
+                        <div class="ms-3 ">
+                            <div class="fw-bold">{{ review.user.username }}</div>
+                            {{ review.text | linebreaks }}
+                            {% if review.reply %}
+                                <!-- Child comment 1-->
+                                <div class="d-flex mt-4">
+                                    <div class="ms-3 border p-2 rounded shadow-sm">
+                                    <div class="fw-bold">{{ review.reply.user.username }}</div>
+                                        {{ review.reply.text | linebreaks }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock content %}
