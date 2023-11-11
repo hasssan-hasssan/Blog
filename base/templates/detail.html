@@ -29,7 +29,7 @@
             <div class="card-body">
                 <!-- Comment form-->
                 {% if not user.is_authenticated %}
-                    <h1>Please login to leave comment! </h1>
+                    <h1 class='text-center fw-bold p-5 text-danger'>Please login to leave comment! </h1>
                 {% else %}
                     <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
                 {% endif %}
